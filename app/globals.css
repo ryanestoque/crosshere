@@ -204,6 +204,24 @@
   html {
     @apply font-sans scroll-smooth;
   }
+
+  /* Override browser default blue autofill with reddish brand tints */
+  input:-webkit-autofill,
+  input:-webkit-autofill:hover, 
+  input:-webkit-autofill:focus, 
+  input:-webkit-autofill:active {
+    -webkit-box-shadow: 0 0 0 30px oklch(0.96 0.02 15) inset !important;
+    -webkit-text-fill-color: var(--foreground) !important;
+    transition: background-color 5000s ease-in-out 0s;
+  }
+  
+  :is(.dark) input:-webkit-autofill,
+  :is(.dark) input:-webkit-autofill:hover, 
+  :is(.dark) input:-webkit-autofill:focus, 
+  :is(.dark) input:-webkit-autofill:active {
+    -webkit-box-shadow: 0 0 0 30px oklch(0.18 0.04 15) inset !important;
+    -webkit-text-fill-color: var(--foreground) !important;
+  }
 }
 
 /* ── Utility Classes ─────────────────────────────────────────────────────── */

@@ -11,6 +11,10 @@ export async function GET(request: Request) {
     const { data, error } = await supabase.auth.exchangeCodeForSession(code);
 
     if (!error && data.user) {
+      if (!data.user.user_metadata?.role) {
+        return NextResponse.redirect(`${origin}/onboarding`);
+      }
+
       // Get the user's role to redirect them correctly
       const { data: profile } = await supabase
         .from("profiles")
@@ -18,7 +22,7 @@ export async function GET(request: Request) {
         .eq("id", data.user.id)
         .single();
 
-      const role = profile?.role ?? "student";
+      const role = profile?.role ?? data.user.user_metadata.role ?? "student";
       return NextResponse.redirect(`${origin}/${role}`);
     }
   }

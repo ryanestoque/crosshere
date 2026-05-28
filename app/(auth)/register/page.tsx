@@ -242,10 +242,12 @@ export default function RegisterPage() {
             onCheckedChange={(v) => setAgreedToTerms(!!v)}
           />
           <Label htmlFor="terms" className="text-sm font-normal text-muted-foreground leading-snug cursor-pointer">
-            I agree to the{" "}
-            <Link href="#" className="text-crosshere hover:underline">Terms of Service</Link>{" "}
-            and{" "}
-            <Link href="#" className="text-crosshere hover:underline">Privacy Policy</Link>
+            <span>
+              I agree to the{" "}
+              <Link href="#" className="text-crosshere hover:underline">Terms of Service</Link>{" "}
+              and{" "}
+              <Link href="#" className="text-crosshere hover:underline">Privacy Policy</Link>
+            </span>
           </Label>
         </div>
 

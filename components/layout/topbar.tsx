@@ -41,6 +41,12 @@ export function Topbar({ onSearchOpen }: TopbarProps) {
   const [showSignOut, setShowSignOut] = React.useState(false);
   const router = useRouter();
   const logout = useAuthStore((state) => state.logout);
+  const user = useAuthStore((state) => state.user);
+  const profile = useAuthStore((state) => state.profile);
+
+  const displayName = profile?.full_name || user?.email?.split('@')[0] || "User";
+  const displayEmail = user?.email || "";
+  const initials = displayName.split(' ').map(n => n[0]).join('').substring(0, 2).toUpperCase();
 
   const handleSignOut = () => {
     logout();
@@ -144,15 +150,15 @@ export function Topbar({ onSearchOpen }: TopbarProps) {
             <Button variant="ghost" size="icon" className="rounded-full ml-1">
               <Avatar className="size-8">
                 <AvatarFallback className="bg-crosshere/10 text-crosshere text-xs font-semibold">
-                  SM
+                  {initials}
                 </AvatarFallback>
               </Avatar>
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end" className="w-48">
             <DropdownMenuLabel>
-              <p className="font-medium">Sarah Mitchell</p>
-              <p className="text-xs font-normal text-muted-foreground">nurse@crosshere.edu</p>
+              <p className="font-medium truncate">{displayName}</p>
+              <p className="text-xs font-normal text-muted-foreground truncate">{displayEmail}</p>
             </DropdownMenuLabel>
             <DropdownMenuSeparator />
             <DropdownMenuItem asChild>

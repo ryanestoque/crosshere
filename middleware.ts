@@ -54,6 +54,9 @@ export async function middleware(request: NextRequest) {
   // Handle root route (/) redirect
   if (pathname === "/") {
     if (user) {
+      if (!user.user_metadata?.role) {
+        return NextResponse.redirect(new URL("/onboarding", request.url));
+      }
       const { data: profile } = await supabase
         .from("profiles")
         .select("role")
@@ -87,6 +90,17 @@ export async function middleware(request: NextRequest) {
     .single();
 
   const role = (profile?.role || user.user_metadata?.role || "student") as string;
+  const hasSelectedRole = !!user.user_metadata?.role;
+
+  // Enforce role selection for authenticated users
+  if (!hasSelectedRole && !pathname.startsWith('/onboarding') && pathname !== '/auth/callback') {
+    return NextResponse.redirect(new URL("/onboarding", request.url));
+  }
+
+  // Prevent users who have already selected a role from accessing onboarding
+  if (hasSelectedRole && pathname.startsWith('/onboarding')) {
+    return NextResponse.redirect(new URL(`/${role}`, request.url));
+  }
 
   // Redirect away from auth pages when already logged in
   if (AUTH_ROUTES.some((route) => pathname.startsWith(route))) {

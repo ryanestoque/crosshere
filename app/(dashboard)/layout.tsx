@@ -51,23 +51,23 @@ export default function DashboardLayout({
     <div className="min-h-screen w-full relative overflow-x-hidden bg-background">
       {/* Light Mode Desktop Background */}
       <div 
-        className="fixed inset-0 z-0 bg-cover bg-center bg-no-repeat pointer-events-none transition-opacity duration-300 hidden md:block dark:hidden blur-[3px] scale-105 opacity-[0.85]"
+        className="fixed inset-0 z-0 bg-cover bg-center bg-no-repeat pointer-events-none transition-opacity duration-300 hidden md:block dark:hidden blur-[6px] scale-105 opacity-[0.15]"
         style={{ backgroundImage: "url('/dashboard-bg-light.png')" }}
       />
       {/* Dark Mode Desktop Background */}
       <div 
-        className="fixed inset-0 z-0 bg-cover bg-center bg-no-repeat pointer-events-none transition-opacity duration-300 hidden dark:md:block blur-[3px] scale-105 opacity-[0.25]"
+        className="fixed inset-0 z-0 bg-cover bg-center bg-no-repeat pointer-events-none transition-opacity duration-300 hidden dark:md:block blur-[6px] scale-105 opacity-[0.08]"
         style={{ backgroundImage: "url('/dashboard-bg.png')" }}
       />
 
       {/* Light Mode Mobile Background */}
       <div 
-        className="fixed inset-0 z-0 bg-cover bg-center bg-no-repeat pointer-events-none transition-opacity duration-300 block md:hidden dark:hidden blur-[3px] scale-105 opacity-[0.85]"
+        className="fixed inset-0 z-0 bg-cover bg-center bg-no-repeat pointer-events-none transition-opacity duration-300 block md:hidden dark:hidden blur-[6px] scale-105 opacity-[0.15]"
         style={{ backgroundImage: "url('/dashboard-bg-mobile-light.png')" }}
       />
       {/* Dark Mode Mobile Background */}
       <div 
-        className="fixed inset-0 z-0 bg-cover bg-center bg-no-repeat pointer-events-none transition-opacity duration-300 hidden dark:block dark:md:hidden blur-[3px] scale-105 opacity-[0.25]"
+        className="fixed inset-0 z-0 bg-cover bg-center bg-no-repeat pointer-events-none transition-opacity duration-300 hidden dark:block dark:md:hidden blur-[6px] scale-105 opacity-[0.08]"
         style={{ backgroundImage: "url('/dashboard-bg-mobile.png')" }}
       />
       {/* Layout Content */}

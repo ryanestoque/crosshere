@@ -14,11 +14,11 @@ export default function DashboardLayout({
   const [commandOpen, setCommandOpen] = React.useState(false);
 
   return (
-    <div className="flex min-h-screen">
+    <div className="flex h-[100dvh] overflow-hidden">
       <Sidebar collapsed={collapsed} onToggle={() => setCollapsed(!collapsed)} />
-      <div className="flex-1 flex flex-col min-w-0">
+      <div className="flex-1 flex flex-col min-w-0 h-full overflow-hidden">
         <Topbar onSearchOpen={() => setCommandOpen(true)} />
-        <main className="flex-1 px-4 pb-8 lg:px-8">
+        <main className="flex-1 overflow-y-auto px-4 pb-8 lg:px-8">
           <div className="mx-auto pt-2">
             {children}
           </div>

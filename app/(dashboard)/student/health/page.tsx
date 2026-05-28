@@ -24,8 +24,15 @@ import {
   Weight,
   Shield,
 } from "lucide-react";
+import { useAuthStore } from "@/store/auth-store";
 
 export default function HealthProfilePage() {
+  const authProfile = useAuthStore((s) => s.profile);
+  const displayName = authProfile?.full_name ?? studentProfile.name;
+  const initials = authProfile?.full_name 
+    ? authProfile.full_name.split(" ").map((n: string) => n[0]).join("").slice(0, 2).toUpperCase()
+    : studentProfile.initials;
+
   return (
     <motion.div
       variants={staggerContainer}
@@ -48,11 +55,11 @@ export default function HealthProfilePage() {
             <div className="flex items-center gap-4">
               <Avatar className="size-16">
                 <AvatarFallback className="bg-crosshere/10 text-crosshere text-xl font-semibold">
-                  {studentProfile.initials}
+                  {initials}
                 </AvatarFallback>
               </Avatar>
               <div className="flex-1">
-                <h2 className="text-base font-semibold">{studentProfile.name}</h2>
+                <h2 className="text-base font-semibold">{displayName}</h2>
                 <p className="text-sm text-muted-foreground">{studentProfile.grade} • {studentProfile.section}</p>
                 <p className="text-xs text-muted-foreground mt-0.5">ID: {studentProfile.studentId}</p>
               </div>

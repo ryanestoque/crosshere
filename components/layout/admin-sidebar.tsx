@@ -123,6 +123,16 @@ function SidebarContent({ collapsed, onToggle }: AdminSidebarProps) {
   const router = useRouter();
   const [showSignOut, setShowSignOut] = React.useState(false);
   const logout = useAuthStore((state) => state.logout);
+  const user = useAuthStore((state) => state.user);
+  const profile = useAuthStore((state) => state.profile);
+
+  const displayName = profile?.full_name || user?.email?.split('@')[0] || "User";
+  const displayRole = profile?.role === 'admin' ? 'Administrator' : 
+                      profile?.role === 'clinic' ? 'Clinic Staff' : 
+                      profile?.role === 'parent' ? 'Parent / Guardian' : 
+                      profile?.role === 'student' ? 'Student' : 'User';
+  
+  const initials = displayName.split(' ').map(n => n[0]).join('').substring(0, 2).toUpperCase();
 
   const handleSignOut = () => {
     logout();
@@ -198,7 +208,7 @@ function SidebarContent({ collapsed, onToggle }: AdminSidebarProps) {
         >
           <Avatar className="size-8 shrink-0 border border-crosshere/20">
             <AvatarFallback className="bg-crosshere/10 text-crosshere text-xs font-semibold">
-              AD
+              {initials}
             </AvatarFallback>
           </Avatar>
           <AnimatePresence>
@@ -209,8 +219,8 @@ function SidebarContent({ collapsed, onToggle }: AdminSidebarProps) {
                 exit={{ opacity: 0, width: 0 }}
                 className="flex-1 min-w-0 overflow-hidden"
               >
-                <p className="text-sm font-medium truncate">System Admin</p>
-                <p className="text-xs text-muted-foreground truncate">Super Administrator</p>
+                <p className="text-sm font-medium truncate">{displayName}</p>
+                <p className="text-xs text-muted-foreground truncate">{displayRole}</p>
               </motion.div>
             )}
           </AnimatePresence>

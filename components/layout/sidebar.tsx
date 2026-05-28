@@ -118,6 +118,16 @@ function SidebarContent({ collapsed, onToggle }: SidebarProps) {
   const router = useRouter();
   const [showSignOut, setShowSignOut] = React.useState(false);
   const logout = useAuthStore((state) => state.logout);
+  const user = useAuthStore((state) => state.user);
+  const profile = useAuthStore((state) => state.profile);
+
+  const displayName = profile?.full_name || user?.email?.split('@')[0] || "User";
+  const displayRole = profile?.role === 'clinic' ? 'Clinic Staff' : 
+                      profile?.role === 'student' ? 'Student' : 
+                      profile?.role === 'parent' ? 'Parent / Guardian' : 
+                      profile?.role === 'admin' ? 'Administrator' : 'User';
+  
+  const initials = displayName.split(' ').map(n => n[0]).join('').substring(0, 2).toUpperCase();
 
   const handleSignOut = () => {
     logout();
@@ -193,7 +203,7 @@ function SidebarContent({ collapsed, onToggle }: SidebarProps) {
         >
           <Avatar className="size-8 shrink-0">
             <AvatarFallback className="bg-crosshere/10 text-crosshere text-xs font-semibold">
-              SM
+              {initials}
             </AvatarFallback>
           </Avatar>
           <AnimatePresence>
@@ -204,8 +214,8 @@ function SidebarContent({ collapsed, onToggle }: SidebarProps) {
                 exit={{ opacity: 0, width: 0 }}
                 className="flex-1 min-w-0 overflow-hidden"
               >
-                <p className="text-sm font-medium truncate">Sarah Mitchell</p>
-                <p className="text-xs text-muted-foreground truncate">School Nurse</p>
+                <p className="text-sm font-medium truncate">{displayName}</p>
+                <p className="text-xs text-muted-foreground truncate">{displayRole}</p>
               </motion.div>
             )}
           </AnimatePresence>

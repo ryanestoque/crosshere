@@ -27,6 +27,7 @@ interface AuthState {
   logout: () => Promise<void>; // alias for signOut
   resetPassword: (email: string) => Promise<{ error: string | null }>;
   setSession: (user: User | null, session: Session | null) => Promise<void>;
+  setRole: (role: Role) => Promise<{ error: string | null }>;
   clearError: () => void;
 }
 
@@ -139,6 +140,52 @@ export const useAuthStore = create<AuthState>((set, get) => ({
       isAuthenticated: true,
       isLoading: false,
     });
+  },
+
+  setRole: async (role) => {
+    const supabase = createClient();
+    const state = get();
+    const user = state.user;
+    
+    if (!user) return { error: "Not authenticated" };
+
+    set({ isLoading: true, error: null });
+
+    // 1. Update user metadata
+    const { error: metadataError } = await supabase.auth.updateUser({
+      data: { role },
+    });
+
+    if (metadataError) {
+      set({ isLoading: false, error: metadataError.message });
+      return { error: metadataError.message };
+    }
+
+    // 2. Update profiles table
+    const { error: profileError } = await supabase
+      .from("profiles")
+      .update({ role })
+      .eq("id", user.id);
+
+    if (profileError) {
+      set({ isLoading: false, error: profileError.message });
+      return { error: profileError.message };
+    }
+
+    // Fetch updated profile just in case
+    const { data: profile } = await supabase
+      .from("profiles")
+      .select("*")
+      .eq("id", user.id)
+      .single();
+
+    set({
+      role,
+      profile,
+      isLoading: false,
+    });
+
+    return { error: null };
   },
 
   logout: async () => {
