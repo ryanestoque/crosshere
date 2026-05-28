@@ -54,16 +54,19 @@ export async function middleware(request: NextRequest) {
   // Handle root route (/) redirect
   if (pathname === "/") {
     if (user) {
-      if (!user.user_metadata?.role) {
-        return NextResponse.redirect(new URL("/onboarding", request.url));
-      }
       const { data: profile } = await supabase
         .from("profiles")
         .select("role")
         .eq("id", user.id)
         .single();
-      const role = (profile?.role || user.user_metadata?.role || "student") as string;
-      return NextResponse.redirect(new URL(`/${role}`, request.url));
+        
+      const role = (profile?.role || user.user_metadata?.role) as string;
+      
+      if (!role) {
+        return NextResponse.redirect(new URL("/onboarding", request.url));
+      }
+      
+      return NextResponse.redirect(new URL(`/${role || "student"}`, request.url));
     }
     return NextResponse.redirect(new URL("/login", request.url));
   }
@@ -90,7 +93,7 @@ export async function middleware(request: NextRequest) {
     .single();
 
   const role = (profile?.role || user.user_metadata?.role || "student") as string;
-  const hasSelectedRole = !!user.user_metadata?.role;
+  const hasSelectedRole = !!(profile?.role || user.user_metadata?.role);
 
   // Enforce role selection for authenticated users
   if (!hasSelectedRole && !pathname.startsWith('/onboarding') && pathname !== '/auth/callback') {

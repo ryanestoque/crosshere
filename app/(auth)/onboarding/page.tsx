@@ -67,9 +67,8 @@ export default function OnboardingPage() {
 
     toast.success("Role updated successfully!");
     
-    // Redirect to the appropriate portal
-    router.push(`/${selectedRole}`);
-    router.refresh();
+    // Redirect to the appropriate portal using window.location to ensure fresh cookies
+    window.location.href = `/${selectedRole}`;
   };
 
   return (
