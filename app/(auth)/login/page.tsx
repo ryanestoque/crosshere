@@ -44,6 +44,7 @@ export default function LoginPage() {
           ? "Please confirm your email before signing in."
           : error;
       setFormError(friendlyError);
+      toast.error(friendlyError);
       return;
     }
 

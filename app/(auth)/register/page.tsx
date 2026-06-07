@@ -4,7 +4,7 @@ import * as React from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { motion } from "framer-motion";
-import { Eye, EyeOff, ArrowRight, Check, AlertCircle, CheckCircle2 } from "lucide-react";
+import { Eye, EyeOff, ArrowRight, Check, AlertCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -27,7 +27,7 @@ export default function RegisterPage() {
   const [password, setPassword] = React.useState("");
   const [loading, setLoading] = React.useState(false);
   const [formError, setFormError] = React.useState("");
-  const [success, setSuccess] = React.useState(false);
+
   const [firstName, setFirstName] = React.useState("");
   const [lastName, setLastName] = React.useState("");
   const [email, setEmail] = React.useState("");
@@ -62,42 +62,20 @@ export default function RegisterPage() {
 
     if (error) {
       setLoading(false);
-      setFormError(error.includes("already registered")
+      const friendlyError = error.includes("already registered")
         ? "An account with this email already exists. Try signing in."
-        : error);
+        : error;
+      setFormError(friendlyError);
+      toast.error(friendlyError);
       return;
     }
 
     setLoading(false);
-    setSuccess(true);
-    toast.success("Account created! Check your email to confirm.");
+    toast.success("Account created! Redirecting...");
+    router.push(`/verify-email?email=${encodeURIComponent(email)}`);
   };
 
   const strength = passwordRequirements.filter((r) => r.test(password)).length;
-
-  if (success) {
-    return (
-      <motion.div
-        initial={{ opacity: 0, scale: 0.95 }}
-        animate={{ opacity: 1, scale: 1 }}
-        className="text-center"
-      >
-        <div className="mx-auto w-16 h-16 rounded-2xl bg-emerald-500/10 flex items-center justify-center mb-6">
-          <CheckCircle2 className="size-8 text-emerald-600 dark:text-emerald-400" />
-        </div>
-        <h2 className="text-2xl font-semibold tracking-tight mb-2">Check your email</h2>
-        <p className="text-sm text-muted-foreground mb-8 max-w-xs mx-auto">
-          We&apos;ve sent a confirmation link to <strong>{email}</strong>. Click it to activate your account.
-        </p>
-        <Button
-          className="w-full h-11 bg-crosshere hover:bg-crosshere/90 text-white"
-          onClick={() => router.push("/login")}
-        >
-          Back to sign in
-        </Button>
-      </motion.div>
-    );
-  }
 
   return (
     <motion.div variants={staggerContainer} initial="hidden" animate="visible">
